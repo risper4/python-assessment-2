@@ -20,7 +20,7 @@ def add_project(args) :
             user.add_task(project)
     
 
-def list_user(args) :
+def list_users(args) :
     user = users.get(args.user)
     if user :
         user.list_users()
@@ -35,10 +35,69 @@ def add_task(args) :
     if target_project :
         task = Task(args.task_title)
         target_project.add_task(task)
+        return
     else :
         print("❌ Project not found")
 
-         
-    
-        
+def mark_complete(args) :
+    user = users.get(args.user)
 
+    if user :
+        current_project = [project for project in user.project if args.project_title == project.title]
+        if current_project :
+            for task in current_project.task :
+                if args.task_title == task.title :
+                    task.complete()
+                    return
+                else :
+                    print('❌ Task not found')
+        else :
+            print('❌ Project not found')
+    else :
+        print('❌ User not found')
+
+         
+def main() :
+    parser = argparse.ArgumentParser(description='Project Management Tool') 
+    subparsers = parser.add_subparsers() 
+    
+    # Subparser for adding users
+    add_user_parser = subparsers.add_parser("add-user" , help="Adds new user")
+    add_user_parser.add_argument("--user", required=True)
+    add_user_parser.set_defaults(func=add_user)
+
+    # Subparser for listing users
+    user_parser = subparsers.add_parser("list-user" , help="Displays all users")
+    user_parser.set_defaults(func=list_users)
+
+    # Subparser for adding projects  
+    add_project_parser = subparsers.add_parser("add-project" , help="Adds a new project to the user's list")
+    add_project_parser.add_argument("--user", required=True)
+    add_project_parser.add_argument("--project_title", required=True)
+    add_project_parser.add_argument("--due_date", required=True)
+    add_project_parser.set_defaults(func=add_project)
+    
+    # Subparser for adding tasks
+    add_task_parser = subparsers.add_parser("add-task" , help="Adds a new task to the user's projects")
+    add_project_parser.add_argument("--user", required=True)
+    add_project_parser.add_argument("--project_title", required=True)
+    add_task_parser.add_argument("--task_title", required=True)
+    add_task_parser.set_defaults(func=add_task)
+
+    #Subparser that marks a task complete
+    complete_parser = subparsers.add_parser("mark-complete" , help='Marks tasks complete')
+    complete_parser.add_argument("--user", required=True)
+    complete_parser.add_argument("--project_title", required=True)
+    complete_parser.add_argument("--task_title" , required=True)
+    complete_parser.set_defaults(func=mark_complete)
+
+    #
+    args = parser.parse_args()
+    if hasattr(args, "func") :
+        args.func(args)
+    else :
+        parser.print_help()
+
+    
+if __name__ == "__main__":
+    main()
