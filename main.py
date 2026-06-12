@@ -1,13 +1,15 @@
 import argparse
-
+# Imported classes from cli_classes
 from models.cli_classes import User, Task, Project
 
+# Uses info dict
 users = {}
-def add_user(args) :
+
+def add_user(args) :    # Adds user as an object and to users{}
     user = User(args.user, args.email)
     users[args.user] = user
     
-def add_project(args) :
+def add_project(args) :    # Adds new project
     user = users.get(args.user)
     if not user :
         print("❌ User not found")
@@ -20,14 +22,14 @@ def add_project(args) :
             user.add_task(project)
     
 
-def list_users(args) :
+def list_users(args) :   # Lists all users
     user = users.get(args.user)
     if user :
         user.list_users()
     else :
         print("❌ No users found")
 
-def add_task(args) :
+def add_task(args) :    # Adds new task
     user = users.get(args.user)
 
     target_project = [project for project in user.projects if project.title == args.project_title]
@@ -39,7 +41,7 @@ def add_task(args) :
     else :
         print("❌ Project not found")
 
-def mark_complete(args) :
+def mark_complete(args) :    # Marks a specifc task complete
     user = users.get(args.user)
 
     if user :
@@ -91,7 +93,7 @@ def main() :
     complete_parser.add_argument("--task_title" , required=True)
     complete_parser.set_defaults(func=mark_complete)
 
-    #
+    #Implements cli commands
     args = parser.parse_args()
     if hasattr(args, "func") :
         args.func(args)
