@@ -1,3 +1,11 @@
+# Imports json feature
+import json
+
+# import json file
+data_file = 'data.json'
+
+import os
+
 import argparse
 # Imported classes from cli_classes
 from models.cli_classes import User, Task, Project
@@ -66,6 +74,48 @@ def mark_complete(args) :    # Marks a specifc task complete
     else :
         print('❌ User not found')
 
+
+def save_data() :
+    data = {}      # Stores user info in the json file
+
+    for name, user in users.item() :   # Uses name to access the user's objects info
+        data[name] = {
+            'name' : user.name,
+            'email' : user.email,
+            'projects' : [     # List comprehension to loop over project object
+                {
+                    'title' : project.title,
+                    'due-date' : project.due_date,
+                    'tasks' : [{'title' : project.task, 'complete' : project.complete} for task in project.tasks]  # List comprehension to loop over task object
+                }
+                for project in user.project
+                ]
+        }
+
+    with open(data_file, 'w') as file :    # Writes the data in the data.json file
+        json.dump(data, file, indent=4)
+    print('Data successfully saved')
+        
+# def load_data() :
+#     if not os.path.exists(data_file) :    # Checks if data.json is present
+#         return                            #  If not, it waits for new input
+    
+#     with open(data_file, 'r') as file :     # Opens the data 
+#         data = json.load(file)
+    
+#     for name, user in data.items() :
+#         user = User(user['name'] , user['email'])
+#         users[name] = user
+#         for project_data in user['projects'] :
+#             project = Project(project_data['title'], project_data['due_date'])
+#             user.add_project(project)
+#             for task_data in project['tasks'] :
+#                 task = Task(task_data['title'], task_data['complete'])
+#                 project.add_task(task)
+
+#     print('Data loaded successfully')
+
+
          
 def main() :
     parser = argparse.ArgumentParser(description='Project Management Tool') 
@@ -109,6 +159,11 @@ def main() :
     else :
         parser.print_help()
 
+    save_data()   # Saves data after every command
+
     
 if __name__ == "__main__":
     main()
+
+
+
