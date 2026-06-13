@@ -6,8 +6,13 @@ from models.cli_classes import User, Task, Project
 users = {}
 
 def add_user(args) :    # Adds user as an object and to users{}
-    user = User(args.user, args.email)
-    users[args.user] = user
+   if args.user in users :
+       print('❌ User already exists in the program')
+       return
+   else :
+       user = User(args.user, args.email)
+       users[args.user] = user
+       print(f"User '{args.user}' has been added successfully")
     
 def add_project(args) :    # Adds new project
     user = users.get(args.user)
@@ -19,15 +24,18 @@ def add_project(args) :    # Adds new project
         if prj.title == project.title :
             print(f"Project '{project.title}' is already in the project list")
         else :
-            user.add_task(project)
+            user.add_project(project)
     
 
 def list_users(args) :   # Lists all users
-    user = users.get(args.user)
-    if user :
-        user.list_users()
+    if not User.users_list:
+        print('❌ Users currently not found')
+        return
     else :
-        print("❌ No users found")
+        print('These are the current users : ')
+        for user in User.users_list :
+            print(f"- {user.name} ({user.email})")
+    
 
 def add_task(args) :    # Adds new task
     user = users.get(args.user)
@@ -66,6 +74,7 @@ def main() :
     # Subparser for adding users
     add_user_parser = subparsers.add_parser("add-user" , help="Adds new user")
     add_user_parser.add_argument("--user", required=True)
+    add_user_parser.add_argument("--email", required=True)
     add_user_parser.set_defaults(func=add_user)
 
     # Subparser for listing users
@@ -81,8 +90,8 @@ def main() :
     
     # Subparser for adding tasks
     add_task_parser = subparsers.add_parser("add-task" , help="Adds a new task to the user's projects")
-    add_project_parser.add_argument("--user", required=True)
-    add_project_parser.add_argument("--project_title", required=True)
+    add_task_parser.add_argument("--user", required=True)
+    add_task_parser.add_argument("--project_title", required=True)
     add_task_parser.add_argument("--task_title", required=True)
     add_task_parser.set_defaults(func=add_task)
 
