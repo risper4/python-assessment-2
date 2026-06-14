@@ -65,7 +65,7 @@ def mark_complete(args) :    # Marks a specifc task complete
         if current_project :
             for task in current_project.task :
                 if args.task_title == task.title :
-                    task.complete()
+                    task.mark_complete()
                     return
                 else :
                     print('❌ Task not found')
@@ -86,7 +86,7 @@ def save_data() :
                 {
                     'title' : project.title,
                     'due-date' : project.due_date,
-                    'tasks' : [{'title' : project.task, 'complete' : project.complete} for task in project.tasks]  # List comprehension to loop over task object
+                    'tasks' : [{'title' : project.task, 'complete' : project.mark_complete} for task in project.tasks]  # List comprehension to loop over task object
                 }
                 for project in user.projects
                 ]

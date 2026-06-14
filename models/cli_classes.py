@@ -89,7 +89,7 @@ class Task :
         else :
             self.title = value
 
-    def complete(self) :    # Marks a specified task as complete
+    def mark_complete(self) :    # Marks a specified task as complete
         self.complete = True
         print(f" ✅ Task '{self.title}' is marked complete")
 
