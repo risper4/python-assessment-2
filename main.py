@@ -96,25 +96,6 @@ def save_data() :
         json.dump(data, file, indent=4)
     print('Data successfully saved')
         
-# def load_data() :
-#     if not os.path.exists(data_file) :    # Checks if data.json is present
-#         return                            #  If not, it waits for new input
-    
-#     with open(data_file, 'r') as file :     # Opens the data 
-#         data = json.load(file)
-    
-#     for name, user in data.items() :
-#         user = User(user['name'] , user['email'])
-#         users[name] = user
-#         for project_data in user['projects'] :
-#             project = Project(project_data['title'], project_data['due_date'])
-#             user.add_project(project)
-#             for task_data in project['tasks'] :
-#                 task = Task(task_data['title'], task_data['complete'])
-#                 project.add_task(task)
-
-#     print('Data loaded successfully')
-
 
          
 def main() :
