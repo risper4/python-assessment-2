@@ -78,7 +78,7 @@ def mark_complete(args) :    # Marks a specifc task complete
 def save_data() :
     data = {}      # Stores user info in the json file
 
-    for name, user in users.item() :   # Uses name to access the user's objects info
+    for name, user in users.items() :   # Uses name to access the user's objects info
         data[name] = {
             'name' : user.name,
             'email' : user.email,
@@ -88,7 +88,7 @@ def save_data() :
                     'due-date' : project.due_date,
                     'tasks' : [{'title' : project.task, 'complete' : project.complete} for task in project.tasks]  # List comprehension to loop over task object
                 }
-                for project in user.project
+                for project in user.projects
                 ]
         }
 
