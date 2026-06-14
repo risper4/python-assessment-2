@@ -32,6 +32,7 @@
 
 ## Tools used
   - Python (mainly)
+  - Pytest (testing)
   - Rich (extarnal dependancy)
   - json file
 
